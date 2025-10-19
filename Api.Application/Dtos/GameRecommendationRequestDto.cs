@@ -12,8 +12,7 @@ namespace Api.Application.Dtos
         [Required(ErrorMessage = "O 'Gênero' é obrigatório.")]
         [GenreValidation]
         public required string Genre { get; set; }
-
-        public string? Platform { get; set; }
+        public List<string>? Platforms { get; set; }
         public int? AvailableRAM { get; set; }
     }
 
@@ -26,7 +25,7 @@ namespace Api.Application.Dtos
                 return ValidationResult.Success;
             }
 
-            return new ValidationResult(ErrorMessage ?? "O 'Gênero' é obrigatório e não pode estar vazio.");
+            return new ValidationResult(ErrorMessage ?? "O 'Gênero' não pode estar vazio.");
         }
     }
 }

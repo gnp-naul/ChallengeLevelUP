@@ -27,47 +27,84 @@ namespace Api.Services.External
         {
             try
             {
-                var queryParams = new List<string>();
+                var allGames = new List<ExternalGame>();
 
-                if (!string.IsNullOrEmpty(request.Genre))
+                if (request.Platforms == null || !request.Platforms.Any() ||
+                    request.Platforms.Contains("all", StringComparer.OrdinalIgnoreCase))
                 {
-                    queryParams.Add($"category={Uri.EscapeDataString(request.Genre)}");
-                }
-
-                if (!string.IsNullOrEmpty(request.Platform) && request.Platform.ToLower() != "all")
-                {
-                    queryParams.Add($"platform={Uri.EscapeDataString(request.Platform.ToLower())}");
-                }
-
-                var url = "games";
-                if (queryParams.Any())
-                {
-                    url += "?" + string.Join("&", queryParams);
-                }
-
-                var response = await _httpClient.GetAsync(url);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var stringResponse = await response.Content.ReadAsStringAsync();
-
-                    var options = new JsonSerializerOptions
-                    {
-                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                        PropertyNameCaseInsensitive = true
-                    };
-
-                    var deserialized = JsonSerializer.Deserialize<List<ExternalGame>>(stringResponse, options);
-                    return deserialized ?? new List<ExternalGame>();
+                    // Busca sem filtro de plataforma
+                    var games = await GetGamesFromApi(request.Genre, null);
+                    allGames.AddRange(games);
                 }
                 else
                 {
-                    throw new HttpRequestException($"Código de status retornado pela API: {response.StatusCode} - {response.ReasonPhrase}");
+                    // Busca para cada plataforma especificada
+                    foreach (var platform in request.Platforms)
+                    {
+                        var games = await GetGamesFromApi(request.Genre, platform);
+                        allGames.AddRange(games);
+                    }
                 }
+
+                // Remove duplicatas (caso algum jogo apareça em múltiplas buscas)
+                return allGames
+                    .GroupBy(g => g.Id)
+                    .Select(g => g.First())
+                    .ToList();
             }
             catch (Exception ex)
             {
-                throw new Exception($"Erro ao chamar a API FreeToPlay: {ex.Message}");
+                throw new Exception($"Erro ao buscar jogos filtrados: {ex.Message}");
+            }
+        }
+
+        private async Task<List<ExternalGame>> GetGamesFromApi(string genre, string platform)
+        {
+            var queryParams = new List<string>();
+
+            if (!string.IsNullOrEmpty(genre))
+            {
+                queryParams.Add($"category={Uri.EscapeDataString(genre)}");
+            }
+
+            if (!string.IsNullOrEmpty(platform) && platform.ToLower() != "all")
+            {
+                // Normaliza a plataforma para o formato que a API espera
+                var normalizedPlatform = platform.ToLower() switch
+                {
+                    "pc" => "pc",
+                    "browser" => "browser",
+                    _ => platform.ToLower()
+                };
+                queryParams.Add($"platform={Uri.EscapeDataString(normalizedPlatform)}");
+            }
+
+            var url = "games";
+            if (queryParams.Any())
+            {
+                url += "?" + string.Join("&", queryParams);
+            }
+
+            var response = await _httpClient.GetAsync(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var stringResponse = await response.Content.ReadAsStringAsync();
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                    PropertyNameCaseInsensitive = true
+                };
+
+                var deserialized = JsonSerializer.Deserialize<List<ExternalGame>>(stringResponse, options);
+                return deserialized ?? new List<ExternalGame>();
+            }
+            else
+            {
+                // Log do erro, mas não quebra o fluxo para outras plataformas
+                Console.WriteLine($"Erro na API para plataforma {platform}: {response.StatusCode}");
+                return new List<ExternalGame>();
             }
         }
     }

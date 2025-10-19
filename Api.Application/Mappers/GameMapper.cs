@@ -49,8 +49,8 @@ namespace Api.Application.Mappers
         {
             return new GameRecommendation
             {
-                Genre = request.Genre, // Para filtro na API
-                Platform = request.Platform ?? "all",
+                Genre = request.Genre,
+                Platforms = request.Platforms,
                 AvailableRAM = request.AvailableRAM
             };
         }
