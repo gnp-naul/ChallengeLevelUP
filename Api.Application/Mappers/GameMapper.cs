@@ -61,6 +61,7 @@ namespace Api.Application.Mappers
             return new GameRecommendation
             {
                 Title = externalGame.Title,
+                Link = externalGame.Game_Url,
                 Genre = externalGame.Genre,
                 Platform = externalGame.Platform,
                 RecommendedAt = DateTime.UtcNow
@@ -85,8 +86,8 @@ namespace Api.Application.Mappers
             return new RecommendedGameDto
             {
                 Id = recommendation.Id,
-                GameTitle = recommendation.Title,
-                GameGenre = recommendation.Genre,
+                Title = recommendation.Title,
+                Genre = recommendation.Genre,
                 Platform = recommendation.Platform,
                 RecommendedAt = recommendation.RecommendedAt
             };

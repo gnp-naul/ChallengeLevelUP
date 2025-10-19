@@ -18,8 +18,9 @@ namespace Api.Infra.Data
             modelBuilder.Entity<GameRecommendation>(entity =>
             {
                 entity.HasKey(e => e.Id);
-                entity.Property(e => e.Title).IsRequired().HasMaxLength(200);
+                entity.Property(e => e.Title).HasMaxLength(200);
                 entity.Property(e => e.Genre).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Link).HasMaxLength(100);
                 entity.Property(e => e.Platform).HasMaxLength(50);
                 entity.Property(e => e.RecommendedAt).IsRequired();
             });

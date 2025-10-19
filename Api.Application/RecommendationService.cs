@@ -41,7 +41,7 @@ namespace Api.Application
 
                 // Salvar no banco
                 var recommendationToSave = selectedGame.ToEntity();
-                //await _gameRecommendationRepository.AddAsync(recommendationToSave);
+                await _gameRecommendationRepository.AddAsync(recommendationToSave);
 
                 return selectedGame.ToResponseDto();
             } 
@@ -51,18 +51,23 @@ namespace Api.Application
             }
         }
 
-        //public async Task<IEnumerable<RecommendedGameDto>> GetRecommendationHistoryAsync()
-        //{
-        //    var recommendations = await _gameRecommendationRepository.GetAllAsync();
+        public async Task<IEnumerable<RecommendedGameDto>> GetRecommendationHistoryAsync()
+        {
+            try
+            {
+                var recommendations = await _gameRecommendationRepository.GetAllAsync();
 
-        //    return recommendations.Select(r => new RecommendedGameDto
-        //    {
-        //        Id = r.Id,
-        //        GameTitle = r.GameTitle,
-        //        GameGenre = r.GameGenre,
-        //        Platform = r.Platform,
-        //        RecommendedAt = r.RecommendedAt
-        //    });
-        //}
+                if (!recommendations.Any())
+                {
+                    throw new Exception("Nenhum jogo encontrado.");
+                }
+
+                return recommendations.Select(GameMapper.ToDto);
+            }
+            catch (Exception ex) 
+            {
+                throw new Exception("Erro ao obter histórico de recomendações: " + ex.Message);
+            }
+        }
     }
 }

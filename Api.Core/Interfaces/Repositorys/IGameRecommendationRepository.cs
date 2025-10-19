@@ -4,7 +4,7 @@ namespace Api.Core.Interfaces.Repositorys
 {
     public interface IGameRecommendationRepository
     {
-        Task<GameRecommendation> AddAsync();
+        Task<GameRecommendation> AddAsync(GameRecommendation game);
         Task<IEnumerable<GameRecommendation>> GetAllAsync();
     }
 }

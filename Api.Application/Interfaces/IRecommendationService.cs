@@ -10,6 +10,6 @@ namespace Api.Application.Interfaces
     public interface IRecommendationService
     {
         Task<GameRecommendationResponseDto> GetGameRecommendationAsync(GameRecommendationRequestDto request);
-        //Task<IEnumerable<RecommendedGameDto>> GetRecommendationHistoryAsync();
+        Task<IEnumerable<RecommendedGameDto>> GetRecommendationHistoryAsync();
     }
 }

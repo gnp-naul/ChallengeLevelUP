@@ -9,8 +9,8 @@ namespace Api.Application.Dtos
     public class RecommendedGameDto
     {
         public int Id { get; set; }
-        public string? GameTitle { get; set; }
-        public string? GameGenre { get; set; }
+        public string? Title { get; set; }
+        public string? Genre { get; set; }
         public string? Platform { get; set; }
         public DateTime RecommendedAt { get; set; }
         public RecommendedGameDto()

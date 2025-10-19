@@ -13,12 +13,11 @@ namespace Api.Infra.Data.Repositorys
             _context = context;
         }
 
-        public async Task<GameRecommendation> AddAsync()
+        public async Task<GameRecommendation> AddAsync(GameRecommendation game)
         {
-            var recommendation = new GameRecommendation();
-            _context.GameRecommendations.Add(recommendation);
+            _context.GameRecommendations.Add(game);
             await _context.SaveChangesAsync();
-            return recommendation;
+            return game;
         }
 
         public async Task<IEnumerable<GameRecommendation>> GetAllAsync()

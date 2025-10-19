@@ -23,11 +23,10 @@ namespace ChallengeLevelUP.Controllers
             return Ok(await _recommendationService.GetGameRecommendationAsync(request));
         }
 
-        //[HttpGet("history")]
-        //public async Task<ActionResult<IEnumerable<RecommendedGameDto>>> GetRecommendationHistory()
-        //{
-        //    var history = await _recommendationService.GetRecommendationHistoryAsync();
-        //    return Ok(history);
-        //}
+        [HttpGet("history")]
+        public async Task<ActionResult<IEnumerable<RecommendedGameDto>>> GetRecommendationHistory()
+        {
+            return Ok(await _recommendationService.GetRecommendationHistoryAsync());
+        }
     }
 }
