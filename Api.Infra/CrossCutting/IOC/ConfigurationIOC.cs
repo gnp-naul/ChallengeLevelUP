@@ -23,9 +23,6 @@ namespace Api.Infra.CrossCutting.IOC
             // Application Services
             services.AddScoped<IRecommendationService, RecommendationService>();
 
-            // Domain Services
-            services.AddScoped<IExternalGameService, ExternalGameService>();
-
             // Repositories
             services.AddScoped<IGameRecommendationRepository, GameRecommendationRepository>();
 
