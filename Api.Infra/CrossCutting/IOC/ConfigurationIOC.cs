@@ -1,6 +1,7 @@
 ﻿using Api.Application;
 using Api.Application.Interfaces;
 using Api.Application.Mappers;
+using Api.Application.Services;
 using Api.Core.Interfaces.Repositorys;
 using Api.Core.Interfaces.Services;
 using Api.Infra.Data;
@@ -25,6 +26,9 @@ namespace Api.Infra.CrossCutting.IOC
 
             // Repositories
             services.AddScoped<IGameRecommendationRepository, GameRecommendationRepository>();
+
+            // Service externa
+            services.AddScoped<IRamEstimationService, RamEstimationService>();
 
             // HTTP Client para API externa
             services.AddHttpClient<IFreeToPlayApiClientService, FreeToPlayApiClientService>(client =>
