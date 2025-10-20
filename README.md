@@ -208,6 +208,8 @@ public async Task GetGamesByFilterAsync_WithValidRequest_ReturnsGames()
 
 ✅ Validações - Regras de negócio
 
+![alt text](test.png)
+
 ## 🚧 Em Melhoria Contínua
 
 - Cache para otimização de performance
