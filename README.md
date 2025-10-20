@@ -132,6 +132,8 @@ Swagger UI: https://localhost:7000/swagger
   "link": "https://www.freetogame.com/open/overwatch-2",
   "genre": "Shooter",
   "platform": "PC (Windows)",
+  "estimatedRequiredRAM": 0,
+  "isCompatibleWithAvailableRAM": true
 }
 ```
 
