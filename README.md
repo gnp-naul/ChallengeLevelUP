@@ -206,6 +206,18 @@ public async Task GetGamesByFilterAsync_WithValidRequest_ReturnsGames()
 
 ✅ Validações - Regras de negócio
 
+## 🚧 Em Melhoria Contínua
+
+- Cache para otimização de performance
+
+- Rate limiting para controle de requisições
+
+- Health checks para monitoramento
+
+- Logging estruturado com Serilog
+
+- Métricas e observabilidade
+
 #### **Desenvolvido usando .NET 8 e Arquitetura Limpa**
 
 <a href="mailto:luuan.dev@gmail.com" title="Gmail">
