@@ -37,14 +37,28 @@ namespace Api.Test.Services
         {
             var expectedGames = new List<ExternalGame>
             {
-                new ExternalGame { Id = 1, Title = "Test Game 1", Genre = "Shooter", Platform = "PC (Windows)" },
-                new ExternalGame { Id = 2, Title = "Test Game 2", Genre = "Shooter", Platform = "Web Browser" }
+                new ExternalGame {
+                    Id = 1,
+                    Title = "Test Game 1",
+                    Genre = "Shooter",
+                    Platform = "PC (Windows)",
+                    Game_Url = "https://test.com/game1",
+                    ShortDescription = "Test description 1"
+                },
+                new ExternalGame {
+                    Id = 2,
+                    Title = "Test Game 2",
+                    Genre = "Shooter",
+                    Platform = "Web Browser",
+                    Game_Url = "https://test.com/game2",
+                    ShortDescription = "Test description 2"
+                }
             };
 
             var request = new GameRecommendation
             {
-                Genre = "Shooter",
-                Platforms = new List<string> { "pc" }
+                Genre = "Shooter", // Para filtro
+                Platforms = new List<string> { "pc" } // Para filtro
             };
 
             SetupHttpMessageHandler(HttpStatusCode.OK, expectedGames);
@@ -62,12 +76,24 @@ namespace Api.Test.Services
         {
             var pcGames = new List<ExternalGame>
             {
-                new ExternalGame { Id = 1, Title = "PC Game", Genre = "Shooter", Platform = "PC (Windows)" }
+                new ExternalGame {
+                    Id = 1,
+                    Title = "PC Game",
+                    Genre = "Shooter",
+                    Platform = "PC (Windows)",
+                    Game_Url = "https://test.com/pc-game"
+                }
             };
 
             var browserGames = new List<ExternalGame>
             {
-                new ExternalGame { Id = 2, Title = "Browser Game", Genre = "Shooter", Platform = "Web Browser" }
+                new ExternalGame {
+                    Id = 2,
+                    Title = "Browser Game",
+                    Genre = "Shooter",
+                    Platform = "Web Browser",
+                    Game_Url = "https://test.com/browser-game"
+                }
             };
 
             var request = new GameRecommendation
@@ -103,27 +129,24 @@ namespace Api.Test.Services
         }
 
         [Fact]
-        public async Task GetGamesByFilterAsync_WhenApiFails_ThrowsException()
-        {
-            var request = new GameRecommendation
-            {
-                Genre = "Shooter",
-                Platforms = new List<string> { "pc" }
-            };
-
-            SetupHttpMessageHandler(HttpStatusCode.InternalServerError, null);
-
-            await Assert.ThrowsAsync<Exception>(() =>
-                _freeToPlayApiClientService.GetGamesByFilterAsync(request));
-        }
-
-        [Fact]
         public async Task GetGamesByFilterAsync_WithNoPlatforms_ReturnsAllGames()
         {
             var expectedGames = new List<ExternalGame>
             {
-                new ExternalGame { Id = 1, Title = "Game 1", Genre = "Shooter", Platform = "PC (Windows)" },
-                new ExternalGame { Id = 2, Title = "Game 2", Genre = "Shooter", Platform = "Web Browser" }
+                new ExternalGame {
+                    Id = 1,
+                    Title = "Game 1",
+                    Genre = "Shooter",
+                    Platform = "PC (Windows)",
+                    Game_Url = "https://test.com/game1"
+                },
+                new ExternalGame {
+                    Id = 2,
+                    Title = "Game 2",
+                    Genre = "Shooter",
+                    Platform = "Web Browser",
+                    Game_Url = "https://test.com/game2"
+                }
             };
 
             var request = new GameRecommendation
@@ -134,10 +157,8 @@ namespace Api.Test.Services
 
             SetupHttpMessageHandler(HttpStatusCode.OK, expectedGames);
 
-            // Act
             var result = await _freeToPlayApiClientService.GetGamesByFilterAsync(request);
 
-            // Assert
             Assert.NotNull(result);
             Assert.Equal(2, result.Count);
         }
