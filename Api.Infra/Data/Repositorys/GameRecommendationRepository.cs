@@ -23,6 +23,7 @@ namespace Api.Infra.Data.Repositorys
         public async Task<IEnumerable<GameRecommendation>> GetAllAsync()
         {
             return await _context.GameRecommendations
+                .AsNoTracking()
                 .OrderByDescending(g => g.RecommendedAt)
                 .ToListAsync();
         }
