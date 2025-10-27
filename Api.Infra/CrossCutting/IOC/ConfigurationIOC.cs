@@ -4,6 +4,7 @@ using Api.Application.Mappers;
 using Api.Application.Services;
 using Api.Core.Interfaces.Repositorys;
 using Api.Core.Interfaces.Services;
+using Api.Infra.Caching;
 using Api.Infra.Data;
 using Api.Infra.Data.Repositorys;
 using Api.Services.External;
@@ -35,6 +36,27 @@ namespace Api.Infra.CrossCutting.IOC
             {
                 client.BaseAddress = new Uri("https://www.freetogame.com/api/");
             });
+
+            // Configuração do Redis
+            services.AddScoped<IRedisCachingService, RedisCachingService>();
+
+            // Configuração do Cache - Fallback automático
+            var redisConnectionString = configuration["Redis:ConnectionString"];
+
+            if (!string.IsNullOrEmpty(redisConnectionString))
+            {
+                // Se tem connection string, tenta Redis
+                services.AddStackExchangeRedisCache(options =>
+                {
+                    options.Configuration = redisConnectionString;
+                    options.InstanceName = configuration["Redis:InstanceName"];
+                });
+            }
+            else
+            {
+                // Fallback para Memory Cache (para desenvolvimento)
+                services.AddDistributedMemoryCache();
+            }
 
             return services;
         }
