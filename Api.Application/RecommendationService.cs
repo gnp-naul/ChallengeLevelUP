@@ -52,7 +52,6 @@ namespace Api.Application.Services
             // Retornar resposta com informações de RAM
             var response = selectedGame.ToResponseDto();
             response.EstimatedRequiredRAM = estimatedRam;
-            response.IsCompatibleWithAvailableRAM = true;
 
             return response;
         }
